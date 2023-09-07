@@ -8,6 +8,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.bup.to_docompose.ui.theme.topAppBarBackgroundColor
+import com.bup.to_docompose.ui.theme.topAppBarContentColor
 
 @Composable
 fun ListAppBar(){
@@ -20,9 +22,9 @@ DefaultListAppBar()
 fun DefaultListAppBar(){
     TopAppBar(
         title = {
-            Text(text = "Tasks")
+            Text(text = "Tasks", color = MaterialTheme.colorScheme.topAppBarContentColor)
         },
-      Modifier.background(MaterialTheme.colorScheme.primary)
+      Modifier.background(MaterialTheme.colorScheme.topAppBarBackgroundColor)
     )
 }
 
