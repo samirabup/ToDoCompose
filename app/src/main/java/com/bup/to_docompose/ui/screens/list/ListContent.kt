@@ -1,6 +1,7 @@
 package com.bup.to_docompose.ui.screens.list
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,27 +22,32 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bup.to_docompose.data.models.Priority
 import com.bup.to_docompose.data.models.ToDoTask
 import com.bup.to_docompose.ui.theme.LARGE_PADDING
 import com.bup.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
+import com.bup.to_docompose.ui.theme.SMALL_PADDING
 import com.bup.to_docompose.ui.theme.TASK_ITEM_ELEVATION
 import com.bup.to_docompose.ui.theme.taskItemBackgroundColor
 import com.bup.to_docompose.ui.theme.taskItemTextColor
+import com.bup.to_docompose.util.RequestState
 
 @ExperimentalMaterial3Api
 @Composable
 fun ListContent(
-    tasks: List<ToDoTask>,
+    tasks: RequestState<List<ToDoTask>>,
     navigationToTaskScreen: (taskId: Int) -> Unit
 ){
-    if (tasks.isEmpty()) {
-        EmptyContent()
-    } else {
-        DisplayTasks(
-            tasks = tasks,
-            navigationToTaskScreen = navigationToTaskScreen
-        )
+    if (tasks is RequestState.Success) {
+        if (tasks.data.isEmpty()) {
+            EmptyContent()
+        } else {
+            DisplayTasks(
+                tasks = tasks.data,
+                navigationToTaskScreen = navigationToTaskScreen
+            )
+        }
     }
 }
 
@@ -62,7 +68,6 @@ fun DisplayTasks(
                 toDoTask = task,
                 navigationToTaskScreen = navigationToTaskScreen
             )
-
         }
     }
 }
@@ -88,7 +93,9 @@ fun TaskItem(
                 .padding(all = LARGE_PADDING)
                 .fillMaxWidth()
         ) {
-            Row {
+            Row(
+              modifier = Modifier.padding(2.dp)
+            ) {
                 Text(
                     modifier = Modifier.weight(8f),
                     text = toDoTask.title,
@@ -120,13 +127,12 @@ fun TaskItem(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-
         }
     }
 }
 
 @Composable
-@Preview
+@Preview(showBackground = true)
 fun TaskItemPreview(){
     TaskItem(
         toDoTask = ToDoTask(

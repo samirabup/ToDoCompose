@@ -1,7 +1,6 @@
-package com.bup.to_docompose.ui.screens
+package com.bup.to_docompose.ui.screens.list
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -17,10 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.bup.to_docompose.R
-import com.bup.to_docompose.ui.screens.list.ListAppBar
-import com.bup.to_docompose.ui.screens.list.ListContent
 import com.bup.to_docompose.ui.theme.fabBackgroundColor
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
 import com.bup.to_docompose.util.SearchAppBarState
