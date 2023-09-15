@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">To-Do Compose</string>
+
+    <string name="empty_content">No Tasks Found.</string>
     <string name="delete_all_actions">Delete All</string>
     <string name="add_button">Add Button</string>
     <string name="search_tasks">Search Tasks</string>
     <string name="sort_tasks">Sort Tasks</string>
+    <string name="tasks">Tasks</string>
+    <string name="search">Search</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="close_icon">Close Icon</string>
+    <string name="sad_face_icon">Sad Face Icon</string>
 </resources>

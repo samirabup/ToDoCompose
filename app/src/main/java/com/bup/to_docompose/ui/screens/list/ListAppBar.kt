@@ -94,7 +94,7 @@ fun DefaultListAppBar(
     TopAppBar(
         title = {
             Text(
-                text = "Tasks",
+                text = stringResource(id = R.string.tasks),
                 color = MaterialTheme.colorScheme.topAppBarContentColor
             )
         },
@@ -197,7 +197,7 @@ fun DeleteAllAction(
             onDismissRequest = {
                 expanded = false
             }) {
-            DropdownMenuItem(text = { "Delete All" },
+            DropdownMenuItem(text = { stringResource(id = R.string.delete_all_actions) },
                 onClick = {
                     expanded = false
                     onDeleteClicked()
@@ -242,7 +242,7 @@ fun SearchAppBar(
                 Text(
                     modifier = Modifier
                         .alpha(alpha = 0.1f),
-                    text = "Search",
+                    text = stringResource(id = R.string.search),
                     color = Color.Black
                 )
             },
@@ -258,7 +258,7 @@ fun SearchAppBar(
                     onClick = { }) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(id = R.string.search_icon),
                         tint = MaterialTheme.colorScheme.topAppBarContentColor
                     )
                 }
@@ -284,7 +284,7 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Close Icon",
+                        contentDescription = stringResource(id = R.string.close_icon),
                         tint = MaterialTheme.colorScheme.topAppBarContentColor
                     )
 
