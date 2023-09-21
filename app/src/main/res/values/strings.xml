@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">To-Do Compose</string>
 
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="drop_down_arrow">Drop Down Arrow Icon</string>
     <string name="empty_content">No Tasks Found.</string>
     <string name="delete_all_actions">Delete All</string>
     <string name="add_button">Add Button</string>

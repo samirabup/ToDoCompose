@@ -24,9 +24,18 @@ import com.bup.to_docompose.util.Action
 
 @Composable
 fun TaskAppBar(
+    selectedTask: ToDoTask?,
     navigateToListScreen: (Action) -> Unit
 ){
-    NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    if (selectedTask == null){
+        NewTaskAppBar(navigateToListScreen = navigateToListScreen)
+    } else {
+        ExistingTaskAppBar(
+            selectedTask = selectedTask,
+            navigateToListScreen = navigateToListScreen
+        )
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
