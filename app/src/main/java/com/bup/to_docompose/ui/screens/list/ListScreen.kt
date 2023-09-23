@@ -1,26 +1,23 @@
 package com.bup.to_docompose.ui.screens.list
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.bup.to_docompose.R
-import com.bup.to_docompose.ui.theme.fabBackgroundColor
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
 import com.bup.to_docompose.util.Action
 import com.bup.to_docompose.util.SearchAppBarState
@@ -48,8 +45,11 @@ fun ListScreen(
     sharedViewModel.handleDatabaseActions(action)
 
     DisplaySnackBar(
-        snackbarHostState = snackbarHostState,
+        snackBarHostState = snackbarHostState,
         handleDatabaseActions = { sharedViewModel.handleDatabaseActions(action) },
+        onUndoClicked = {
+            sharedViewModel.action.value = it
+        },
         taskTitle = sharedViewModel.title.value ,
         action = action
     )
@@ -98,8 +98,9 @@ fun ListFab(
 
 @Composable
 fun DisplaySnackBar(
-   snackbarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState,
     handleDatabaseActions: () -> Unit,
+    onUndoClicked: (Action) -> Unit,
     taskTitle: String,
     action: Action
 ){
@@ -109,11 +110,37 @@ fun DisplaySnackBar(
     LaunchedEffect(key1 = action){
         if (action != Action.NO_ACTION){
             scope.launch {
-                val snackBarResult = snackbarHostState.showSnackbar(
+                val snackBarResult = snackBarHostState.showSnackbar(
                     message = "${action.name}: $taskTitle",
-                    actionLabel = "Ok"
+                    actionLabel = setActionLabel(action = action)
+                )
+                undoDeletedTask(
+                    action = action,
+                    snackBarResult = snackBarResult,
+                    onUndoClicked = onUndoClicked
                 )
             }
         }
     }
 }
+
+private fun setActionLabel(action: Action): String{
+    return if (action.name == "DELETE") {
+        "UNDO"
+    } else{
+        "OK"
+    }
+}
+
+private fun undoDeletedTask(
+    action: Action,
+    snackBarResult: SnackbarResult,
+    onUndoClicked: (Action) -> Unit
+){
+    if (snackBarResult == SnackbarResult.ActionPerformed
+        && action == Action.DELETE
+    ){
+        onUndoClicked(Action.UNDO)
+    }
+}
+
