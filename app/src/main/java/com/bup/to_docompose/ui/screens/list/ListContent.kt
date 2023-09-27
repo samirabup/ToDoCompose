@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,27 +28,50 @@ import com.bup.to_docompose.data.models.Priority
 import com.bup.to_docompose.data.models.ToDoTask
 import com.bup.to_docompose.ui.theme.LARGE_PADDING
 import com.bup.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
-import com.bup.to_docompose.ui.theme.SMALL_PADDING
 import com.bup.to_docompose.ui.theme.TASK_ITEM_ELEVATION
 import com.bup.to_docompose.ui.theme.taskItemBackgroundColor
 import com.bup.to_docompose.ui.theme.taskItemTextColor
 import com.bup.to_docompose.util.RequestState
+import com.bup.to_docompose.util.SearchAppBarState
 
 @ExperimentalMaterial3Api
 @Composable
 fun ListContent(
-    tasks: RequestState<List<ToDoTask>>,
+    allTasks: RequestState<List<ToDoTask>>,
+    searchedTasks: RequestState<List<ToDoTask>>,
+    searchAppBarState: SearchAppBarState,
     navigationToTaskScreen: (taskId: Int) -> Unit
 ){
-    if (tasks is RequestState.Success) {
-        if (tasks.data.isEmpty()) {
-            EmptyContent()
-        } else {
-            DisplayTasks(
-                tasks = tasks.data,
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        if (searchedTasks is RequestState.Success){
+            HandelListContent(
+                tasks = searchedTasks.data,
                 navigationToTaskScreen = navigationToTaskScreen
             )
         }
+    } else {
+        if (allTasks is RequestState.Success) {
+            HandelListContent(
+                tasks = allTasks.data,
+                navigationToTaskScreen = navigationToTaskScreen
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HandelListContent(
+    tasks: List<ToDoTask>,
+    navigationToTaskScreen: (taskId: Int) -> Unit
+){
+    if (tasks.isEmpty()) {
+        EmptyContent()
+    } else {
+        DisplayTasks(
+            tasks = tasks,
+            navigationToTaskScreen = navigationToTaskScreen
+        )
     }
 }
 
@@ -57,7 +81,10 @@ fun DisplayTasks(
     tasks: List<ToDoTask>,
     navigationToTaskScreen: (taskId: Int) -> Unit
 ){
-    LazyColumn{
+    LazyColumn(
+        contentPadding = PaddingValues(all = LARGE_PADDING),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ){
         items(
             items = tasks,
             key = { task ->
@@ -93,9 +120,7 @@ fun TaskItem(
                 .padding(all = LARGE_PADDING)
                 .fillMaxWidth()
         ) {
-            Row(
-              modifier = Modifier.padding(2.dp)
-            ) {
+            Row() {
                 Text(
                     modifier = Modifier.weight(8f),
                     text = toDoTask.title,

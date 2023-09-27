@@ -33,14 +33,32 @@ class SharedViewModel @Inject constructor(
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
 
-
     val searchAppBarState: MutableState<SearchAppBarState> =
         mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
 
+    private val _searchedTasks =
+        MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTasks: StateFlow<RequestState<List<ToDoTask>>> = _searchedTasks
+
     private val _allTasks =
         MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks
+
+    fun searchDatabase(searchQuery: String) {
+        _searchedTasks.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%$searchQuery%")
+                    .collect { searchedTasks ->
+                        _searchedTasks.value = RequestState.Success(searchedTasks)
+                    }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
 
     fun getAllTasks() {
         _allTasks.value = RequestState.Loading
@@ -51,7 +69,7 @@ class SharedViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-           _allTasks.value = RequestState.Error(e)
+            _allTasks.value = RequestState.Error(e)
         }
     }
 
@@ -65,7 +83,7 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    private fun addTask(){
+    private fun addTask() {
         viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
                 title = title.value,
@@ -74,21 +92,23 @@ class SharedViewModel @Inject constructor(
             )
             repository.addTask(toDoTask = toDoTask)
         }
+        searchAppBarState.value = SearchAppBarState.CLOSED
     }
-    private fun updateTask(){
-        viewModelScope.launch (Dispatchers.IO){
+
+    private fun updateTask() {
+        viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
-            id = id.value,
-            title = title.value,
-            description = description.value,
-            priority = priority.value
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
             )
             repository.updateTask(toDoTask = toDoTask)
         }
     }
 
-    private fun deleteTask(){
-        viewModelScope.launch (Dispatchers.IO){
+    private fun deleteTask() {
+        viewModelScope.launch(Dispatchers.IO) {
             val toDoTask = ToDoTask(
                 id = id.value,
                 title = title.value,
@@ -99,37 +119,48 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    fun handleDatabaseActions(action: Action){
-         when (action) {
-             Action.ADD -> {
-                 addTask()
-             }
-             Action.UPDATE -> {
-                updateTask()
-             }
-             Action.DELETE -> {
-                deleteTask()
-             }
-             Action.DELETE_ALL -> {
+    private fun deleteAllTasks(){
+        viewModelScope.launch (Dispatchers.IO) {
+            repository.deleteAllTasks()
+        }
+    }
 
-             }
-             Action.UNDO -> {
+    fun handleDatabaseActions(action: Action) {
+        when (action) {
+            Action.ADD -> {
                 addTask()
-             }
-             else -> {
+            }
 
-             }
-         }
+            Action.UPDATE -> {
+                updateTask()
+            }
+
+            Action.DELETE -> {
+                deleteTask()
+            }
+
+            Action.DELETE_ALL -> {
+                deleteAllTasks()
+            }
+
+            Action.UNDO -> {
+                addTask()
+            }
+
+            else -> {
+
+            }
+        }
         this.action.value = Action.NO_ACTION
     }
 
     fun updateTaskFields(selectedTask: ToDoTask?) {
-        if (selectedTask != null){
+        if (selectedTask != null) {
             id.value = selectedTask.id
             title.value = selectedTask.title
             description.value = selectedTask.description
             priority.value = selectedTask.priority
-        }else{
+        } else {
             id.value = 0
             title.value = ""
             description.value = ""

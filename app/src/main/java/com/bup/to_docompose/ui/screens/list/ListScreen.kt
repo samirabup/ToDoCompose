@@ -37,15 +37,17 @@ fun ListScreen(
     val action by sharedViewModel.action
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
+    val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
+
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
 
-    val snackbarHostState = remember {SnackbarHostState() }
+    val snackBarHostState = remember {SnackbarHostState() }
 
     sharedViewModel.handleDatabaseActions(action)
 
     DisplaySnackBar(
-        snackBarHostState = snackbarHostState,
+        snackBarHostState = snackBarHostState,
         handleDatabaseActions = { sharedViewModel.handleDatabaseActions(action) },
         onUndoClicked = {
             sharedViewModel.action.value = it
@@ -65,7 +67,9 @@ fun ListScreen(
         },
         content = {
                   ListContent(
-                      tasks = allTasks,
+                      allTasks = allTasks,
+                      searchedTasks = searchedTasks,
+                      searchAppBarState = searchAppBarState,
                       navigationToTaskScreen = navigateToTaskScreen
                   )
         },
@@ -111,7 +115,7 @@ fun DisplaySnackBar(
         if (action != Action.NO_ACTION){
             scope.launch {
                 val snackBarResult = snackBarHostState.showSnackbar(
-                    message = "${action.name}: $taskTitle",
+                    message = setMessage(action = action, taskTitle = taskTitle),
                     actionLabel = setActionLabel(action = action)
                 )
                 undoDeletedTask(
@@ -121,6 +125,13 @@ fun DisplaySnackBar(
                 )
             }
         }
+    }
+}
+
+private fun setMessage(action: Action, taskTitle: String): String {
+    return when(action){
+        Action.DELETE_ALL -> "All Tasks Removed."
+        else -> "${action.name}: $taskTitle"
     }
 }
 
