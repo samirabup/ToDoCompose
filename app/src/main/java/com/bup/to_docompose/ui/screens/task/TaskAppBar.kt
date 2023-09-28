@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.bup.to_docompose.R
+import com.bup.to_docompose.components.DisplayAlertDialog
 import com.bup.to_docompose.data.models.Priority
 import com.bup.to_docompose.data.models.ToDoTask
 import com.bup.to_docompose.ui.theme.topAppBarContentColor
@@ -108,8 +109,10 @@ fun ExistingTaskAppBar(
             )
         },
         actions = {
-            DeleteAction(onDeleteClicked = navigateToListScreen)
-            UpdateAction(onUpdateClicked = navigateToListScreen)
+            ExistingTaskAppBarActions(
+                selectedTask = selectedTask,
+                navigateToListScreen = navigateToListScreen
+            )
         }
 
     )
@@ -128,10 +131,36 @@ fun CloseAction(
 }
 
 @Composable
-fun DeleteAction(
-    onDeleteClicked: (Action) -> Unit
+fun ExistingTaskAppBarActions(
+    selectedTask: ToDoTask,
+    navigateToListScreen: (Action) -> Unit
 ){
-    IconButton(onClick = { onDeleteClicked(Action.DELETE)}) {
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = stringResource(
+            id = R.string.delete_task,
+            selectedTask.title
+        ),
+        message = stringResource(
+            id = R.string.delete_task_confirmation,
+            selectedTask.title
+        ) ,
+        openDialog = openDialog ,
+        closeDialog = { openDialog = false },
+        onYesClicked = { navigateToListScreen(Action.DELETE) }
+    )
+    DeleteAction(onDeleteClicked = {
+        openDialog = true
+    })
+    UpdateAction(onUpdateClicked = navigateToListScreen)
+}
+
+@Composable
+fun DeleteAction(
+    onDeleteClicked: () -> Unit
+){
+    IconButton(onClick = { onDeleteClicked()}) {
         Icon(
             imageVector = Icons.Filled.Delete,
             contentDescription = stringResource(id = R.string.delete_icon),
