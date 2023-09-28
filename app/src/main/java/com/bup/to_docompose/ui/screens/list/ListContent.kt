@@ -39,23 +39,43 @@ import com.bup.to_docompose.util.SearchAppBarState
 fun ListContent(
     allTasks: RequestState<List<ToDoTask>>,
     searchedTasks: RequestState<List<ToDoTask>>,
+    lowPriorityTasks: List<ToDoTask>,
+    highPriorityTasks: List<ToDoTask>,
+    sortState: RequestState<Priority>,
     searchAppBarState: SearchAppBarState,
     navigationToTaskScreen: (taskId: Int) -> Unit
 ){
-    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
-        if (searchedTasks is RequestState.Success){
-            HandelListContent(
-                tasks = searchedTasks.data,
-                navigationToTaskScreen = navigationToTaskScreen
-            )
-        }
-    } else {
-        if (allTasks is RequestState.Success) {
-            HandelListContent(
-                tasks = allTasks.data,
-                navigationToTaskScreen = navigationToTaskScreen
-            )
-        }
+    if (sortState is RequestState.Success){
+            when{
+                searchAppBarState == SearchAppBarState.TRIGGERED -> {
+                    if (searchedTasks is RequestState.Success){
+                        HandelListContent(
+                            tasks = searchedTasks.data,
+                            navigationToTaskScreen = navigationToTaskScreen
+                        )
+                    }
+                }
+                sortState.data == Priority.NONE -> {
+                    if (allTasks is RequestState.Success) {
+                        HandelListContent(
+                            tasks = allTasks.data,
+                            navigationToTaskScreen = navigationToTaskScreen
+                        )
+                    }
+                }
+                sortState.data == Priority.LOW -> {
+                    HandelListContent(
+                        tasks = lowPriorityTasks,
+                        navigationToTaskScreen = navigationToTaskScreen
+                    )
+                }
+                sortState.data == Priority.HIGH -> {
+                    HandelListContent(
+                        tasks = highPriorityTasks,
+                        navigationToTaskScreen = navigationToTaskScreen
+                    )
+                }
+            }
     }
 }
 
