@@ -1,6 +1,5 @@
 package com.bup.to_docompose.navigation.destination
 
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf

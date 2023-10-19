@@ -6,9 +6,11 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.bup.to_docompose.navigation.destination.listComposable
+import com.bup.to_docompose.navigation.destination.splashComposable
 import com.bup.to_docompose.navigation.destination.taskComposable
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
-import com.bup.to_docompose.util.Constants.LIST_SCREEN
+import com.bup.to_docompose.util.Constants.SPLASH_SCREEN
+
 @ExperimentalMaterial3Api
 @Composable
 fun SetupNavigation(
@@ -21,15 +23,18 @@ fun SetupNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = LIST_SCREEN
+        startDestination = SPLASH_SCREEN
     ) {
+        splashComposable(
+            navigateToTaskScreen = screen.splash
+        )
         listComposable(
-            navigateToTaskScreen = screen.task,
+            navigateToTaskScreen = screen.list,
             sharedViewModel = sharedViewModel
         )
         taskComposable(
             sharedViewModel = sharedViewModel,
-            navigateToListScreen = screen.list
+            navigateToListScreen = screen.task
         )
     }
 }
