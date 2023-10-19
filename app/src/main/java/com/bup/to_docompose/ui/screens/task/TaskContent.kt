@@ -2,6 +2,7 @@ package com.bup.to_docompose.ui.screens.task
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,13 +30,14 @@ fun TaskContent(
     description: String,
     onDescriptionChanged: (String) -> Unit,
     priority: Priority,
-    onPrioritySelected: (Priority) -> Unit
+    onPrioritySelected: (Priority) -> Unit,
+    paddingValues: PaddingValues
 ){
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(all = LARGE_PADDING)
+            .padding(top = paddingValues.calculateTopPadding())
     ) {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -75,6 +77,7 @@ private fun TaskContentPreview(){
         description ="" ,
         onDescriptionChanged = {},
         priority = Priority.LOW,
-        onPrioritySelected = {}
+        onPrioritySelected = {},
+        paddingValues = PaddingValues(all = LARGE_PADDING)
     )
 }

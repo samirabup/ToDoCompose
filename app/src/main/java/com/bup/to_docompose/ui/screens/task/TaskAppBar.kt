@@ -11,11 +11,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.bup.to_docompose.R
 import com.bup.to_docompose.components.DisplayAlertDialog
 import com.bup.to_docompose.data.models.Priority
@@ -50,10 +53,12 @@ fun NewTaskAppBar(
         },
         title = {
             Text(
-                text = stringResource(id = R.string.add_task),
-                color = MaterialTheme.colorScheme.topAppBarContentColor
+                text = stringResource(id = R.string.add_task)
             )
         },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
+        ),
         actions = {
             AddAction(onAddClicked = navigateToListScreen)
         }
@@ -108,6 +113,9 @@ fun ExistingTaskAppBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
+        colors = TopAppBarDefaults.smallTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
+        ),
         actions = {
             ExistingTaskAppBarActions(
                 selectedTask = selectedTask,
@@ -192,8 +200,8 @@ private fun ExistingTaskAppBarPreview(){
     ExistingTaskAppBar(
         selectedTask = ToDoTask(
             id = 0,
-            title = "Nimira",
-            description = "Tahia Azrin",
+            title = "",
+            description = " ",
             priority = Priority.HIGH
         ),
         navigateToListScreen = {}
