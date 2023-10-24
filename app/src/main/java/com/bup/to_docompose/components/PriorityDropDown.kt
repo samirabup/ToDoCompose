@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenu
@@ -27,8 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.bup.to_docompose.R
 import com.bup.to_docompose.ui.theme.PRIORITY_DROP_DOWN_HEIGHT
@@ -42,17 +46,22 @@ fun PriorityDropDown(
     val angle: Float by animateFloatAsState(
         targetValue = if (expanded) 180f else 0f
     )
-    
+
+    var parentSize by remember { mutableStateOf(IntSize.Zero) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .onGloballyPositioned {
+                parentSize = it.size
+            }
             .background(MaterialTheme.colorScheme.background)
             .height(PRIORITY_DROP_DOWN_HEIGHT)
             .clickable { expanded = true }
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
-            shape = MaterialTheme.shapes.small
+                shape = MaterialTheme.shapes.small
             ),
 
         verticalAlignment = Alignment.CenterVertically
@@ -83,35 +92,37 @@ fun PriorityDropDown(
         }
         DropdownMenu(
             modifier = Modifier
-                .fillMaxWidth(fraction = 0.94f),
+                .width(with(LocalDensity.current){parentSize.width.toDp()}),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                text = { Priority.LOW.name },
-                onClick = {
-                    expanded = false
-                    onPrioritySelected(Priority.LOW)
-                }
-            )
-            PriorityItem(priority = Priority.LOW)
+            Priority.values().slice(0..2).forEach{ priority ->
+                DropdownMenuItem(
+                    text = { priority.name },
+                    onClick = {
+                        expanded = false
+                        onPrioritySelected(priority)
+                    }
+                )
+                PriorityItem(priority = priority)
+            }
 
-            DropdownMenuItem(
-                text = { Priority.MEDIUM.name },
-                onClick = {
-                    expanded = false
-                    onPrioritySelected(Priority.MEDIUM)
-                }
-            )
-            PriorityItem(priority = Priority.MEDIUM)
-            DropdownMenuItem(
-                text = { Priority.HIGH.name },
-                onClick = {
-                    expanded = false
-                    onPrioritySelected(Priority.HIGH)
-                }
-            )
-            PriorityItem(priority = Priority.HIGH)
+//            DropdownMenuItem(
+//                text = { Priority.MEDIUM.name },
+//                onClick = {
+//                    expanded = false
+//                    onPrioritySelected(Priority.MEDIUM)
+//                }
+//            )
+//            PriorityItem(priority = Priority.MEDIUM)
+//            DropdownMenuItem(
+//                text = { Priority.HIGH.name },
+//                onClick = {
+//                    expanded = false
+//                    onPrioritySelected(Priority.HIGH)
+//                }
+//            )
+//            PriorityItem(priority = Priority.HIGH)
         }
     }
 }

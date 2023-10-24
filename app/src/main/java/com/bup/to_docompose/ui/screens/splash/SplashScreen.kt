@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun SplashScreen(
@@ -54,6 +55,11 @@ fun SplashScreen(
         delay(SPLASH_SCREEN_DELAY)
         navigateToListScreen()
     }
+    Splash(offsetState = offsetState, alphaState = alphaState)
+}
+
+@Composable
+fun Splash(offsetState: Dp, alphaState:Float){
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +76,6 @@ fun SplashScreen(
         )
     }
 }
-
 @Composable
 fun getLogo(): Int{
     return if (isSystemInDarkTheme()){
@@ -83,9 +88,7 @@ fun getLogo(): Int{
 @Composable
 @Preview
 private fun SplashScreenPreview(){
-    SplashScreen(
-        navigateToListScreen = {}
-    )
+    Splash(offsetState = 0.dp, alphaState = 1f)
 }
 
 

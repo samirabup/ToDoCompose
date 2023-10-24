@@ -45,7 +45,6 @@ import com.bup.to_docompose.ui.theme.Typography
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
 import com.bup.to_docompose.util.Action
 import com.bup.to_docompose.util.SearchAppBarState
-import com.bup.to_docompose.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -165,28 +164,38 @@ fun SortAction(
             onDismissRequest = { expanded = false }
 
         ) {
-            DropdownMenuItem(
-                text = { ("") },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.LOW)
-                }
-            )
-            PriorityItem(priority = Priority.LOW)
-
-            DropdownMenuItem(text = { ("") },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.HIGH)
-                })
-            PriorityItem(priority = Priority.HIGH)
-
-            DropdownMenuItem(text = { ("") },
-                onClick = {
-                    expanded = false
-                    onSortClicked(Priority.NONE)
-                })
-            PriorityItem(priority = Priority.NONE)
+            Priority.values().slice(setOf(0, 2, 3)).forEach{ priority ->
+                DropdownMenuItem(
+                    text = { ("") },
+                    onClick = {
+                        expanded = false
+                        onSortClicked(priority)
+                    }
+                )
+                PriorityItem(priority = priority)
+            }
+//            DropdownMenuItem(
+//                text = { ("") },
+//                onClick = {
+//                    expanded = false
+//                    onSortClicked(Priority.LOW)
+//                }
+//            )
+//            PriorityItem(priority = Priority.LOW)
+//
+//            DropdownMenuItem(text = { ("") },
+//                onClick = {
+//                    expanded = false
+//                    onSortClicked(Priority.HIGH)
+//                })
+//            PriorityItem(priority = Priority.HIGH)
+//
+//            DropdownMenuItem(text = { ("") },
+//                onClick = {
+//                    expanded = false
+//                    onSortClicked(Priority.NONE)
+//                })
+//            PriorityItem(priority = Priority.NONE)
         }
     }
 }
@@ -205,7 +214,8 @@ fun DeleteAllAction(
             contentDescription = stringResource(id = R.string.delete_all_actions),
             tint = MaterialTheme.colorScheme.topAppBarContentColor
         )
-        DropdownMenu(expanded = expanded,
+        DropdownMenu(
+            expanded = expanded,
             onDismissRequest = {
                 expanded = false
             }) {
@@ -234,9 +244,6 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
-    var trailingIconState by remember {
-        mutableStateOf(TrailingIconState.READY_TO_DELETE)
-    }
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -278,20 +285,11 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                      when(trailingIconState){
-                          TrailingIconState.READY_TO_DELETE -> {
-                              onTextChange("")
-                              trailingIconState = TrailingIconState.READY_TO_CLOSE
-                          }
-                          TrailingIconState.READY_TO_CLOSE -> {
-                              if (text.isNotEmpty()){
-                                  onTextChange("")
-                              } else {
-                                  onCloseClicked()
-                                  trailingIconState = TrailingIconState.READY_TO_DELETE
-                              }
-                          }
-                      }
+                        if (text.isNotEmpty()) {
+                            onTextChange("")
+                        } else {
+                            onCloseClicked()
+                        }
                     }
                 ) {
                     Icon(
