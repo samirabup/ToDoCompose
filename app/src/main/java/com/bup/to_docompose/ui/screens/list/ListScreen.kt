@@ -1,6 +1,7 @@
 package com.bup.to_docompose.ui.screens.list
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -19,9 +20,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.bup.to_docompose.R
+import com.bup.to_docompose.ui.theme.LARGE_PADDING
 import com.bup.to_docompose.ui.theme.fabBackgroundColor
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
 import com.bup.to_docompose.util.Action
@@ -80,7 +83,6 @@ fun ListScreen(
                 searchAppBarState = searchAppBarState,
                 onSwipeToDelete = { action, task ->
                     sharedViewModel.updateAction(newAction = action)
-//                    sharedViewModel.action = action
                     sharedViewModel.updateTaskFields(selectedTask = task)
                     snackBarHostState.currentSnackbarData?.dismiss()
                 },
@@ -123,10 +125,10 @@ fun DisplaySnackBar(
     onUndoClicked: (Action) -> Unit,
     taskTitle: String,
     action: Action
-){
+) {
     val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = action){
-        if (action != Action.NO_ACTION){
+    LaunchedEffect(key1 = action) {
+        if (action != Action.NO_ACTION) {
             scope.launch {
                 val snackBarResult = snackBarHostState.showSnackbar(
                     message = "${action.name}: $taskTitle",
@@ -143,36 +145,6 @@ fun DisplaySnackBar(
         }
     }
 }
-
-
-//@Composable
-//fun DisplaySnackBar(
-//    snackBarHostState: SnackbarHostState,
-//    handleDatabaseActions: () -> Unit,
-//    onUndoClicked: (Action) -> Unit,
-//    taskTitle: String,
-//    action: Action
-//) {
-//    handleDatabaseActions()
-//
-//    val scope = rememberCoroutineScope()
-//
-//    LaunchedEffect(key1 = action) {
-//        if (action != Action.NO_ACTION) {
-//            scope.launch {
-//                val snackBarResult = snackBarHostState.showSnackbar(
-//                    message = "${action.name}: $taskTitle",
-//                    actionLabel = "Ok"
-//                )
-//                undoDeletedTask(
-//                    action = action,
-//                    snackBarResult = snackBarResult,
-//                    onUndoClicked = onUndoClicked
-//                )
-//            }
-//        }
-//    }
-//}
 
 private fun setMessage(action: Action, taskTitle: String): String {
     return when (action) {
