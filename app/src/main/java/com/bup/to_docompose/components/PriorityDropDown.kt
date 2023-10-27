@@ -98,13 +98,12 @@ fun PriorityDropDown(
         ) {
             Priority.values().slice(0..2).forEach{ priority ->
                 DropdownMenuItem(
-                    text = { priority.name },
+                    text = {  PriorityItem(priority = priority) },
                     onClick = {
                         expanded = false
                         onPrioritySelected(priority)
                     }
                 )
-                PriorityItem(priority = priority)
             }
 
 //            DropdownMenuItem(

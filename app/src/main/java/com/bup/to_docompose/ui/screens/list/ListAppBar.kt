@@ -164,13 +164,12 @@ fun SortAction(
         ) {
             Priority.values().slice(setOf(0, 2, 3)).forEach{ priority ->
                 DropdownMenuItem(
-                    text = { ("") },
+                    text = { (PriorityItem(priority = priority)) },
                     onClick = {
                         expanded = false
                         onSortClicked(priority)
                     }
                 )
-                PriorityItem(priority = priority)
             }
 //            DropdownMenuItem(
 //                text = { ("") },
@@ -217,7 +216,8 @@ fun DeleteAllAction(
             onDismissRequest = {
                 expanded = false
             }) {
-            DropdownMenuItem(text = { stringResource(id = R.string.delete_all_actions) },
+            DropdownMenuItem(
+                text = { stringResource(id = R.string.delete_all_actions) },
                 onClick = {
                     expanded = false
                     onDeleteAllConfirmed()
