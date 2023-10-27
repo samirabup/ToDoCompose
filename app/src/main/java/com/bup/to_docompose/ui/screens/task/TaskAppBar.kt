@@ -56,7 +56,7 @@ fun NewTaskAppBar(
                 text = stringResource(id = R.string.add_task)
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp)
         ),
         actions = {
@@ -113,7 +113,7 @@ fun ExistingTaskAppBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp)
         ),
         actions = {

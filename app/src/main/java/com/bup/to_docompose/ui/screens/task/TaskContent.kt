@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,7 +21,6 @@ import com.bup.to_docompose.data.models.Priority
 import com.bup.to_docompose.ui.theme.LARGE_PADDING
 import com.bup.to_docompose.ui.theme.MEDIUM_PADDING
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskContent(
     title: String,

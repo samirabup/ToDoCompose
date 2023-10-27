@@ -217,7 +217,6 @@ fun RedBackground(degrees: Float) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskItem(
     toDoTask: ToDoTask,
@@ -238,7 +237,7 @@ fun TaskItem(
                 .padding(all = LARGE_PADDING)
                 .fillMaxWidth()
         ) {
-            Row() {
+            Row {
                 Text(
                     modifier = Modifier.weight(8f),
                     text = toDoTask.title,

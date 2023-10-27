@@ -97,7 +97,7 @@ val ColorScheme.taskItemTextColor: Color
     get() = if (!isSystemInDarkTheme()) Color.DarkGray else Color.LightGray
 val ColorScheme.taskItemBackgroundColor: Color
     @Composable
-    get() = if (!isSystemInDarkTheme()) Color.White else Color.DarkGray
+    get() = if (!isSystemInDarkTheme()) Color.White else DarkGray
 val ColorScheme.fabBackgroundColor: Color
     @Composable
     get() = if (!isSystemInDarkTheme()) md_theme_light_primary else md_theme_dark_primary
@@ -108,4 +108,4 @@ val ColorScheme.topAppBarContentColor: Color
 
 val ColorScheme.topAppBarBackgroundColor: Color
     @Composable
-    get() = if (!isSystemInDarkTheme()) md_theme_light_primary else Color.Black
+    get() = if (!isSystemInDarkTheme()) md_theme_light_primary else md_theme_dark_inversePrimary

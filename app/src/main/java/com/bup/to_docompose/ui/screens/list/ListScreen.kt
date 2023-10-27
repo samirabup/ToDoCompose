@@ -1,7 +1,6 @@
 package com.bup.to_docompose.ui.screens.list
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -20,11 +19,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.bup.to_docompose.R
-import com.bup.to_docompose.ui.theme.LARGE_PADDING
 import com.bup.to_docompose.ui.theme.fabBackgroundColor
 import com.bup.to_docompose.ui.viewmodels.SharedViewModel
 import com.bup.to_docompose.util.Action
